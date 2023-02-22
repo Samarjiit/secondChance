@@ -1,0 +1,16 @@
+
+main{
+    min-height: 80vh;
+}
+.navbar{
+    height:13vh;
+    background-color: rgb(255, 214, 160);
+}
+.navbar a{
+    color: rgb(117, 43, 9);
+}
+
+.Logo{
+    margin-left:5vh;
+  
+}
