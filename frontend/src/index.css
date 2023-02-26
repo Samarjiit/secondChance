@@ -1,16 +1,167 @@
+* {
+  font-family: "Poppins", sans-serif;
+}
+main {
+  min-height: 80vh;
+}
+.navbar {
+  background-color: rgb(255, 243, 226);
+}
+.navbar a {
+  color: rgb(117, 43, 9);
+}
 
-main{
-    min-height: 80vh;
-}
-.navbar{
-    height:13vh;
-    background-color: rgb(255, 214, 160);
-}
-.navbar a{
-    color: rgb(117, 43, 9);
+#basic-navbar-nav {
+  background-color: rgb(255, 243, 226);
+  text-align: left;
 }
 
-.Logo{
-    margin-left:5vh;
-  
+.toggle {
+  color: rgb(246, 169, 70);
+}
+#logo {
+  width: 7vh;
+  height: 7vh;
+}
+.toggle:focus {
+  box-shadow: none;
+}
+#brand {
+  color: rgb(159, 58, 0);
+}
+#brand:hover {
+  color: rgb(0, 0, 0);
+}
+.productcard {
+  border: 0;
+  display: flex;
+  justify-content: top;
+  align-items: center;
+  box-shadow: 0 1px 5px rgba(108, 108, 108, 0.2);
+  height: 23rem;
+  transition: transform ease 0.5s;
+}
+.productcard:hover {
+  transform: translate(0, -7px);
+}
+.productcard a {
+  text-decoration: none;
+}
+#prodimg {
+  box-shadow: 0 1px 5px rgba(74, 74, 74, 0.2);
+}
+.top {
+  flex-direction: row;
+}
+#prodcategory {
+  box-shadow: 0 1px 5px rgba(108, 108, 108, 0.2);
+  background-color: rgb(255, 247, 231);
+  justify-content: left;
+  width: fit-content;
+  padding: 1vh;
+  border-radius: 5px;
+  font-size: 5px;
+  color: black;
+}
+
+#prodreviews {
+  font-size: 15px;
+
+  color: goldenrod;
+}
+
+#prodname {
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  width: fit-content;
+  text-transform: uppercase;
+}
+
+#prodcond {
+  border-radius: 5px;
+  width: auto;
+  font-size: 15px;
+  color: purple;
+  padding-bottom: 2rem;
+}
+
+#prodprice {
+  font-size: 16px;
+  float: left;
+  color: rgb(186, 50, 0);
+}
+#produpload {
+  font-size: 15px;
+  float: right;
+  color: rgb(123, 123, 123);
+}
+@media screen and (max-width: 767px) and (min-width: 470px) {
+  .productcard {
+    height: 30rem;
+  }
+}
+@media screen and (max-width: 470px) and (min-width: 420px) {
+  .productcard {
+    height: 28rem;
+  }
+}
+@media screen and (max-width: 320px) {
+  #brand {
+    font-size: 20px;
+  }
+}
+.back {
+  background-color: rgb(253, 209, 150);
+  color: rgb(109, 0, 0);
+  border: 0;
+  width: auto;
+  font-size: 0.7em;
+}
+.back:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(172, 97, 0);
+}
+.buttons button {
+  background-color: rgb(255, 230, 197);
+  color: rgb(109, 0, 0);
+  border: 0;
+  width: auto;
+  font-size: 0.9em;
+}
+#btn {
+  outline: none;
+  border: 0;
+  width: auto;
+}
+.buttons button:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(139, 51, 0);
+}
+#or {
+  padding-top: 1em;
+}
+#pname {
+  font-size: 1.2em;
+  color: rgb(191, 83, 0);
+  text-transform: uppercase;
+}
+#pseller {
+  font-size: 1em;
+  color: rgb(0, 0, 0);
+  text-transform: capitalize;
+}
+#pprice {
+  font-size: 1em;
+  color: rgb(0, 55, 75);
+}
+#pstatus {
+  font-size: 1em;
+  color: rgb(159, 0, 0);
+}
+#pdesc {
+  font-size: 1.1em;
+  color: rgb(191, 83, 0);
+}
+#dcontent {
+  font-size: 0.9em;
 }
