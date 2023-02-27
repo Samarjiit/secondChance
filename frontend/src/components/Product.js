@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap";
 
 const Product = ({ product }) => {
   return (
-    <Card className="my-3 p-3 productcard">
+    <Card style={{height:'27rem'}} className="my-3 p-3 productcard">
       <Link to={`/product/${product._id}`}>
         <Card.Text as="h6" id="prodcategory">
           {product.category}
@@ -19,13 +19,15 @@ const Product = ({ product }) => {
           <Card.Text as="h6" id="prodcond">
             {product.condition}
           </Card.Text>
-
-          <Card.Text as="h6" id="prodprice">
-            <strong>₹{product.price}</strong>
+          <Card.Text as="h6" id="prodcond">
+           <strong>{product.price}</strong> 
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           {product.uploaddate}
           </Card.Text>
-          <Card.Text as="h6" id="produpload">
-            {product.uploaddate}
-          </Card.Text>
+          
+         
+         
+        
         </Card.Body>
       </Link>
     </Card>
