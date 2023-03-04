@@ -1,26 +1,32 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Row,
   Col,
   Image,
   ListGroup,
-  Card,
   Button,
   ListGroupItem,
 } from "react-bootstrap";
-import products from "../products";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 const ProductScreen = ({ match }) => {
   const { id } = useParams();
-  const product = products.find((p) => p._id === id);
+  const [product, setProduct] = useState({});
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await axios.get(`/api/products/${id}`);
+      setProduct(data);
+    };
+    fetchProduct();
+  }, [id]);
   return (
     <>
       <Link className="btn btn-light my-3 back" to="/">
         <i class="fa-solid fa-chevron-left"></i>
       </Link>
       <Row>
-        <Col md={5}>
+        <Col md={6}>
           <Image src={product.image} alt={product.name} fluid id="pimg" />
         </Col>
         <Col md={6}>
@@ -52,10 +58,11 @@ const ProductScreen = ({ match }) => {
             </ListGroupItem>
           </ListGroup>
           <br></br>
+
           <ListGroup className="buttons" horizontal>
             <ListGroupItem id="btn">
               <Button
-                className="btn-block"
+                className="btn-inline"
                 type="button"
                 disabled={product.countInStock === 0}
               >
@@ -69,6 +76,7 @@ const ProductScreen = ({ match }) => {
               </Button>
             </ListGroupItem>
           </ListGroup>
+
           <ListGroup variant="flush" className="buttons">
             <ListGroupItem>
               <Button className="btn-block" type="button">
