@@ -1,0 +1,35 @@
+{
+  "name": "secondchance",
+  "version": "1.0.0",
+  "description": "2nd Chance - a Student Market Ecosystem",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/server",
+    "server": "nodemon backend/server",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MishaB28/secondChance.git"
+  },
+  "keywords": [
+    "2nd",
+    "Chance"
+  ],
+  "author": "TechNova",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MishaB28/secondChance/issues"
+  },
+  "homepage": "https://github.com/MishaB28/secondChance#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.21"
+  }
+}

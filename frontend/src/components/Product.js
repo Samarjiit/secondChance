@@ -23,6 +23,7 @@ const Product = ({ product }) => {
           <Card.Text as="h6" id="prodprice">
             <strong>₹{product.price}</strong>
           </Card.Text>
+
           <Card.Text as="h6" id="produpload">
             {product.uploaddate}
           </Card.Text>
