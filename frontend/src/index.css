@@ -32,6 +32,7 @@ main {
 #brand:hover {
   color: rgb(0, 0, 0);
 }
+
 .productcard {
   border: 0;
   display: flex;
@@ -176,4 +177,7 @@ h4 {
 }
 #back {
   color: blue;
+}
+#steps {
+  font-size: 0.9em;
 }
