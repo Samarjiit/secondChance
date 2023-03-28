@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import {
   Row,
   Col,
@@ -11,7 +10,6 @@ import {
   Form,
   Button,
   Card,
-  ListGroupItem,
 } from "react-bootstrap";
 import Message from "../components/Message";
 import { addToCart, removeFromCart } from "../actions/cartActions";
@@ -27,6 +25,8 @@ const CartScreen = ({}) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
   useEffect(() => {
     if (productID) {
       dispatch(addToCart(productID, qty));
@@ -39,12 +39,18 @@ const CartScreen = ({}) => {
     navigate("/cart");
   };
   const checkoutHandler = () => {
-    navigate("/login?redirect=shipping");
+    //navigate("/login?redirect=/shipping");
+    if (userInfo) {
+      navigate("/appointment");
+    } else {
+      navigate("/login");
+    }
   };
   return (
     <Row>
       <Col md={8}>
         <h4>Shopping Cart</h4>
+        <br></br>
         {cartItems.length === 0 ? (
           <Message variant="light">
             Your cart is empty.{" "}
