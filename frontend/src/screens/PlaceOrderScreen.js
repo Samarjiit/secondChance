@@ -52,13 +52,10 @@ const PlaceOrderScreen = () => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h4>Appointment</h4>
-              <p>
-                <strong>Address: </strong>
-                {cart.appointmentAddress.address},{" "}
-                {cart.appointmentAddress.city},{" "}
-                {cart.appointmentAddress.postalCode},{" "}
-                {cart.appointmentAddress.country}
-              </p>
+              <strong>Address: </strong>
+              {cart.appointmentAddress.address}, {cart.appointmentAddress.city},{" "}
+              {cart.appointmentAddress.postalCode},{" "}
+              {cart.appointmentAddress.country}
             </ListGroup.Item>
             <ListGroup.Item>
               <h4>Payment Method</h4>
@@ -100,7 +97,7 @@ const PlaceOrderScreen = () => {
           </ListGroup>
         </Col>
         <Col md={4}>
-          <ListGroup variant="flush">
+          <ListGroup>
             <ListGroup.Item>
               <h4>Order Summary</h4>
             </ListGroup.Item>
@@ -130,14 +127,16 @@ const PlaceOrderScreen = () => {
             {error && <Message variant="light">{error}</Message>}
 
             <ListGroup.Item id="btn" className="buttons">
-              <Button
-                type="button"
-                variant="light"
-                disabled={!cart.cartItems.length}
-                onClick={placeOrderHandler}
-              >
-                Place Order
-              </Button>
+              <Row>
+                <Button
+                  type="button"
+                  variant="light"
+                  disabled={!cart.cartItems.length}
+                  onClick={placeOrderHandler}
+                >
+                  Place Order
+                </Button>
+              </Row>
             </ListGroup.Item>
           </ListGroup>
         </Col>

@@ -14,6 +14,7 @@ import {
 import Message from "../components/Message";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 
+// eslint-disable-next-line no-empty-pattern
 const CartScreen = ({}) => {
   const { id } = useParams();
   const productID = id;
@@ -32,7 +33,7 @@ const CartScreen = ({}) => {
       dispatch(addToCart(productID, qty));
       navigate("/cart");
     }
-  }, [dispatch, productID, qty]);
+  }, [dispatch, productID, qty, navigate]);
   const removeFromCartHandler = (id) => {
     console.log(id);
     dispatch(removeFromCart(id));

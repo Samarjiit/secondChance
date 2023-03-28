@@ -67,7 +67,6 @@ main {
 
 #prodreviews {
   font-size: 15px;
-
   color: goldenrod;
 }
 
@@ -76,25 +75,31 @@ main {
   font-size: 18px;
   width: fit-content;
   text-transform: uppercase;
+  text-align: center;
 }
 
 #prodcond {
   border-radius: 5px;
   width: auto;
-  font-size: 15px;
-  color: purple;
-  padding-bottom: 2rem;
-}
-
-#prodprice {
   font-size: 16px;
-  float: left;
+  color: purple;
+  padding: 10px;
+  float: right;
+}
+#cfooter {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: white;
+  text-align: center;
+}
+#prodprice {
+  font-size: 17px;
   color: rgb(186, 50, 0);
 }
 #produpload {
   font-size: 15px;
-  float: right;
   color: rgb(123, 123, 123);
+  justify-content: center;
 }
 @media screen and (max-width: 767px) and (min-width: 470px) {
   .productcard {
@@ -109,6 +114,9 @@ main {
 @media screen and (max-width: 320px) {
   #brand {
     font-size: 20px;
+  }
+  .productcard {
+    height: 40rem;
   }
 }
 .back {
@@ -169,8 +177,16 @@ main {
 
 h4 {
   color: rgb(125, 17, 82);
+  font-size: 1.3em;
 }
 
+h5 {
+  font-size: 1.1em;
+  color: rgb(161, 90, 3);
+}
+p {
+  font-size: 1em;
+}
 #subtotal {
   border: none;
   text-align: left;

@@ -16,7 +16,8 @@ import { useParams } from "react-router-dom";
 import { listProductDetails } from "../actions/productActions";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-const ProductScreen = ({ history, match }) => {
+// eslint-disable-next-line no-empty-pattern
+const ProductScreen = ({}) => {
   const dispatch = useDispatch();
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;

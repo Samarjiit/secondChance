@@ -6,6 +6,7 @@ import FormContainer from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { saveAppointmentAddress } from "../actions/cartActions";
 
+// eslint-disable-next-line no-empty-pattern
 const AppointmentScreen = ({}) => {
   const cart = useSelector((state) => state.cart);
   const { appointmentAddress } = cart;
