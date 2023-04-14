@@ -23,8 +23,12 @@ app.get("/", (req, res) => {
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
-
 app.use("/cart/api/products", productRoutes);
+
+app.get("/api/config/paypal", (req, res) =>
+  res.send(process.env.PAYPAL_CLIENT_ID)
+);
+
 app.use(notFound);
 app.use(errorHandler);
 
@@ -34,6 +38,6 @@ const environment = process.env.NODE_ENV || "development";
 app.listen(
   PORT,
   console.log(
-    `server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
   )
 );

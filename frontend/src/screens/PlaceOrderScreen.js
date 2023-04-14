@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { createOrder } from "../actions/orderActions";
+import { ORDER_CREATE_RESET } from "../constants/orderConstants";
+import { USER_DETAILS_RESET } from "../constants/userConstants";
 
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
@@ -25,9 +27,11 @@ const PlaceOrderScreen = () => {
   useEffect(() => {
     if (success) {
       navigate(`/order/${order._id}`);
+      dispatch({ type: USER_DETAILS_RESET });
+      dispatch({ type: ORDER_CREATE_RESET });
     }
     //eslint-disable-next-line
-  }, [navigate, success]);
+  }, [navigate, success, dispatch]);
 
   const placeOrderHandler = () => {
     dispatch(
@@ -103,20 +107,20 @@ const PlaceOrderScreen = () => {
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Items</Col>
-                <Col>Rs.{cart.itemsPrice}</Col>
+                <Col>Items:</Col>
+                <Col>{cart.cartItems.length}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Tax</Col>
+                <Col>Tax:</Col>
                 <Col>Rs.{cart.taxPrice}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
                 <Col>
-                  <strong>Total</strong>
+                  <strong>Total:</strong>
                 </Col>
                 <Col>
                   <strong>Rs.{cart.totalPrice}</strong>
