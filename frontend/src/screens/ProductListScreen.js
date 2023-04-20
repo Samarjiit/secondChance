@@ -5,7 +5,12 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { listProducts, deleteProduct } from "../actions/productActions";
+import {
+  listProducts,
+  deleteProduct,
+  createProduct,
+} from "../actions/productActions";
+import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
 
 const ProductListScreen = () => {
   const dispatch = useDispatch();
@@ -21,16 +26,37 @@ const ProductListScreen = () => {
     success: successDelete,
   } = productDelete;
 
+  const productCreate = useSelector((state) => state.productCreate);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdProduct,
+  } = productCreate;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   useEffect(() => {
+    dispatch({ type: PRODUCT_CREATE_RESET });
     if (userInfo && userInfo.isAdmin) {
       dispatch(listProducts());
     } else {
       navigate("/login");
     }
-  }, [dispatch, navigate, userInfo, successDelete]);
+    if (successCreate) {
+      navigate(`/admin/product/${createdProduct._id}/edit`);
+    } else {
+      dispatch(listProducts);
+    }
+  }, [
+    dispatch,
+    navigate,
+    userInfo,
+    successDelete,
+    successCreate,
+    createdProduct,
+  ]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure?")) {
@@ -38,7 +64,7 @@ const ProductListScreen = () => {
     }
   };
   const createProductHandler = (product) => {
-    //create
+    dispatch(createProduct());
   };
   return (
     <>
@@ -54,6 +80,8 @@ const ProductListScreen = () => {
       </Row>
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant="light">{errorDelete}</Message>}
+      {loadingCreate && <Loader />}
+      {errorCreate && <Message variant="light">{errorCreate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -65,6 +93,7 @@ const ProductListScreen = () => {
               <th>ID</th>
               <th>NAME</th>
               <th>PRICE</th>
+              <th>COUNT IN STOCK</th>
               <th>CATEGORY</th>
               <th>BRAND</th>
               <th> </th>
@@ -76,6 +105,7 @@ const ProductListScreen = () => {
                 <td>{product._id}</td>
                 <td>{product.name}</td>
                 <td>Rs. {product.price}</td>
+                <td>{product.countInStock}</td>
                 <td> {product.category}</td>
                 <td>{product.brand}</td>
                 <td>
@@ -84,6 +114,7 @@ const ProductListScreen = () => {
                       <i className="fas fa-edit"></i>
                     </Button>
                   </LinkContainer>
+                  &nbsp;
                   <Button
                     variant="danger"
                     className="btn-sm"

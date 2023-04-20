@@ -9,6 +9,7 @@ import Message from "../components/Message";
 import Loader from "../components/CheckoutSteps";
 import { getOrderDetails, payOrder } from "../actions/orderActions";
 import { ORDER_PAY_RESET } from "../constants/orderConstants";
+import moment from "moment";
 const OrderScreen = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -20,6 +21,8 @@ const OrderScreen = () => {
 
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
+  const orderdate = moment(order.paidAt).format("DD MMM, YYYY");
+
   useEffect(() => {
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get("/api/config/paypal");
@@ -94,7 +97,7 @@ const OrderScreen = () => {
               </p>
 
               {order.isPaid ? (
-                <Message variant="success">Paid on {order.paidAt}</Message>
+                <Message variant="success">Paid on {orderdate}</Message>
               ) : (
                 <Message variant="info">Not Paid</Message>
               )}

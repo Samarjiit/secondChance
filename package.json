@@ -33,6 +33,7 @@
     "http-proxy-middleware": "^2.0.6",
     "instamojo-nodejs": "^0.0.5",
     "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
     "mongoose": "^7.0.2",
     "razorpay": "^2.8.6"
   },
