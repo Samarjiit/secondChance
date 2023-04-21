@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
@@ -6,7 +7,10 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import { listProductDetails, updateProduct } from "../actions/productActions";
-import { PRODUCT_UPDATE_RESET } from "../constants/productConstants";
+import {
+  PRODUCT_DETAILS_RESET,
+  PRODUCT_UPDATE_RESET,
+} from "../constants/productConstants";
 import moment from "moment";
 
 const ProductEditScreen = () => {
@@ -16,11 +20,13 @@ const ProductEditScreen = () => {
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
   const [brand, setBrand] = useState("");
+  const [condition, setCondition] = useState("New");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
-  const [condition, setCondition] = useState("");
   const [sellername, setSellerName] = useState("");
+  const [uploading, setUploading] = useState(false);
+
   const dispatch = useDispatch();
 
   const productDetails = useSelector((state) => state.productDetails);
@@ -31,12 +37,14 @@ const ProductEditScreen = () => {
     error: errorUpdate,
     success: successUpdate,
   } = productUpdate;
-  const date = moment(product.uploaddate).format("DD MMM, YYYY");
-
+  const date = moment(product.uploaddate).format("DD, MMM, YYYY");
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
   const navigate = useNavigate();
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: PRODUCT_UPDATE_RESET });
+      dispatch({ type: PRODUCT_DETAILS_RESET });
       navigate("/admin/productlist");
     } else {
       if (!product.name || product._id !== productId) {
@@ -46,15 +54,39 @@ const ProductEditScreen = () => {
         setPrice(product.price);
         setImage(product.image);
         setBrand(product.brand);
+        setCondition(product.condition);
         setCategory(product.category);
         setCountInStock(product.countInStock);
         setDescription(product.description);
-        setCondition(product.condition);
         setSellerName(product.sellername);
         //setUploadDate(product.uploadDate);
       }
     }
   }, [dispatch, product, productId, navigate, successUpdate]);
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post("/api/upload", formData, config);
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
@@ -64,9 +96,9 @@ const ProductEditScreen = () => {
         price,
         image,
         brand,
+        condition,
         category,
         description,
-        condition,
         countInStock,
         sellername,
       })
@@ -116,17 +148,26 @@ const ProductEditScreen = () => {
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Form.Group controlId="image">
+            <Form.Group>
               <br></br>
               <Form.Label>
                 <h6>Image</h6>
               </Form.Label>
               <Form.Control
+                id="image"
                 type="text"
                 placeholder="Enter image url"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
+              <Form.Control
+                type="file"
+                id="image-file"
+                label="Choose File"
+                custom="true"
+                onChange={uploadFileHandler}
+              ></Form.Control>
+              {uploading && <Loader />}
               <br></br>
             </Form.Group>
             <Form.Group controlId="brand">

@@ -29,10 +29,10 @@ const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
-    //if (req.user._id == product.user._id) {
-    await product.deleteOne();
-    res.json({ message: "Product removed" });
-    // }
+    if (req.user._id == product.user._id) {
+      await product.deleteOne();
+      res.json({ message: "Product removed" });
+    }
   } else {
     res.status(404);
     throw new Error("Product not found");
@@ -65,17 +65,24 @@ const createProduct = asyncHandler(async (req, res) => {
 //@route PUT/api/products/:id
 //@access Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, countInStock } =
-    req.body;
+  const {
+    name,
+    price,
+    description,
+    image,
+    brand,
+    condition,
+    category,
+    countInStock,
+  } = req.body;
   const product = await Product.findById(req.params.id);
   if (product) {
     product.name = name;
-
     product.price = price;
     product.description = description;
     product.image = image;
     product.brand = brand;
-    product.condition = "condition";
+    product.condition = condition;
     product.category = category;
     product.countInStock = countInStock;
 

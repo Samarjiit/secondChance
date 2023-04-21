@@ -19,6 +19,7 @@ import {
 export const listProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST });
+
     const { data } = await axios.get("/api/products");
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
@@ -139,15 +140,17 @@ export const updateProduct = (product) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-
     const { data } = await axios.put(
       `/api/products/${product._id}`,
       product,
       config
     );
-
     dispatch({
       type: PRODUCT_UPDATE_SUCCESS,
+      payload: data,
+    });
+    dispatch({
+      type: PRODUCT_DETAILS_SUCCESS,
       payload: data,
     });
   } catch (error) {

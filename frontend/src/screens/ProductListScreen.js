@@ -66,6 +66,7 @@ const ProductListScreen = () => {
   const createProductHandler = (product) => {
     dispatch(createProduct());
   };
+
   return (
     <>
       <Row className="align-items-center">
@@ -93,6 +94,7 @@ const ProductListScreen = () => {
               <th>ID</th>
               <th>NAME</th>
               <th>PRICE</th>
+
               <th>COUNT IN STOCK</th>
               <th>CATEGORY</th>
               <th>BRAND</th>
@@ -100,31 +102,34 @@ const ProductListScreen = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
-              <tr key={product._id}>
-                <td>{product._id}</td>
-                <td>{product.name}</td>
-                <td>Rs. {product.price}</td>
-                <td>{product.countInStock}</td>
-                <td> {product.category}</td>
-                <td>{product.brand}</td>
-                <td>
-                  <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                    <Button variant="light" className="btn-sm">
-                      <i className="fas fa-edit"></i>
+            {products
+              .filter((product) => product.sellername === userInfo.name)
+              .map((product) => (
+                <tr key={product._id}>
+                  <td>{product._id}</td>
+                  <td>{product.name}</td>
+                  <td>Rs. {product.price}</td>
+
+                  <td>{product.countInStock}</td>
+                  <td> {product.category}</td>
+                  <td>{product.brand}</td>
+                  <td>
+                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                      <Button variant="light" className="btn-sm">
+                        <i className="fas fa-edit"></i>
+                      </Button>
+                    </LinkContainer>
+                    &nbsp;
+                    <Button
+                      variant="danger"
+                      className="btn-sm"
+                      onClick={() => deleteHandler(product._id)}
+                    >
+                      <i className="fas fa-trash"></i>
                     </Button>
-                  </LinkContainer>
-                  &nbsp;
-                  <Button
-                    variant="danger"
-                    className="btn-sm"
-                    onClick={() => deleteHandler(product._id)}
-                  >
-                    <i className="fas fa-trash"></i>
-                  </Button>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </Table>
       )}
