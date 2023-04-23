@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { PayPalButton } from "react-paypal-button-v2";
+import React, { useEffect } from "react";
+
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Row, Col, ListGroup, Image, Button } from "react-bootstrap";
@@ -22,8 +22,7 @@ const OrderScreen = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const orderId = id;
-  const [sdkReady, setSdkReady] = useState(false);
-
+  const [{ isPending, isResolved, isRejected }] = usePayPalScriptReducer();
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
   const userLogin = useSelector((state) => state.userLogin);
@@ -37,37 +36,32 @@ const OrderScreen = () => {
     if (!userInfo) {
       navigate("/login");
     }
-    const addPayPalScript = async () => {
-      const { data: clientId } = await axios.get("/api/config/paypal");
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
-      script.async = true;
-      script.onload = () => {
-        setSdkReady(true);
-      };
-      document.body.appendChild(script);
-    };
 
     if (!order || successPay || order._id !== orderId || successDeliver) {
       dispatch({ type: ORDER_PAY_RESET });
       dispatch({ type: ORDER_DELIVER_RESET });
       dispatch(getOrderDetails(orderId));
-    } else if (!order.isPaid) {
-      if (!window.paypal) {
-        addPayPalScript();
-      }
-    } else {
-      setSdkReady(true);
     }
   }, [order, orderId, dispatch, successPay, successDeliver]);
-  const successPaymentHandler = (paymentResult) => {
-    console.log(paymentResult);
-    dispatch(payOrder(orderId, paymentResult));
+  const createOrder = (data, actions) => {
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: { value: Math.round(order.totalPrice / 81).toFixed(2) },
+        },
+      ],
+    });
   };
+  const successPaymentHandler = (data, actions) => {
+    return actions.order.capture().then((details) => {
+      dispatch(payOrder(orderId, details));
+    });
+  };
+
   const deliverHandler = () => {
     dispatch(deliverOrder(order));
   };
+
   return loading ? (
     <Loader />
   ) : error ? (
@@ -187,12 +181,16 @@ const OrderScreen = () => {
             {!order.isPaid && (
               <ListGroup.Item>
                 {loadingPay && <Loader />}
-                {!sdkReady ? (
+                {isPending && <Loader />}
+                {isRejected && (
+                  <Message variant="danger">SDK load error</Message>
+                )}
+                {!isResolved ? (
                   <Loader />
                 ) : (
-                  <PayPalButton
-                    amount={Math.round(order.totalPrice / 81).toFixed(2)}
-                    onSuccess={successPaymentHandler}
+                  <PayPalButtons
+                    createOrder={createOrder}
+                    onApprove={successPaymentHandler}
                   />
                 )}
               </ListGroup.Item>

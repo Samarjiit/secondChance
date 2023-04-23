@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./screens/HomeScreen";
@@ -20,43 +22,71 @@ import ProductEditScreen from "./screens/ProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
 
 const App = () => {
+  const [clientID, setClientID] = useState("");
+  useEffect(() => {
+    const getClientId = async () => {
+      const { data: clientId } = await axios.get("/api/config/paypal");
+
+      setClientID(clientId);
+    };
+
+    if (!window.paypal) {
+      getClientId();
+    }
+  }, []);
+
   return (
-    <Router>
-      <Header />
-      <main className="py-3">
-        <Container>
-          <Routes>
-            <Route path="/order/:id" element={<OrderScreen />} />
-            <Route path="/appointment" element={<AppointmentScreen />} />
-            <Route path="/payment" element={<PaymentScreen />} />
-            <Route path="/placeorder" element={<PlaceOrderScreen />} />
-            <Route path="/login" element={<LoginScreen />} />
-            <Route path="/register" element={<RegisterScreen />} />
-            <Route path="/profile" element={<ProfileScreen />} />
-            <Route path="/product/:id" element={<ProductScreen />} />
-            <Route path="/cart/:id?" element={<CartScreen />} />
-            <Route path="/admin/userlist" element={<UserListScreen />} />
-            <Route path="/admin/user/:id/edit" element={<UserEditScreen />} />
-            <Route path="/admin/productlist" element={<ProductListScreen />} />
+    <>
+      {clientID && (
+        <PayPalScriptProvider options={{ "client-id": clientID }}>
+          <Router>
+            <Header />
+            <main className="py-3">
+              <Container>
+                <Routes>
+                  <Route path="/order/:id" element={<OrderScreen />} />
+                  <Route path="/appointment" element={<AppointmentScreen />} />
+                  <Route path="/payment" element={<PaymentScreen />} />
+                  <Route path="/placeorder" element={<PlaceOrderScreen />} />
+                  <Route path="/login" element={<LoginScreen />} />
+                  <Route path="/register" element={<RegisterScreen />} />
+                  <Route path="/profile" element={<ProfileScreen />} />
+                  <Route path="/product/:id" element={<ProductScreen />} />
+                  <Route path="/cart/:id?" element={<CartScreen />} />
+                  <Route path="/admin/userlist" element={<UserListScreen />} />
+                  <Route
+                    path="/admin/user/:id/edit"
+                    element={<UserEditScreen />}
+                  />
+                  <Route
+                    path="/admin/productlist"
+                    element={<ProductListScreen />}
+                  />
 
-            <Route
-              path="/admin/product/:id/edit"
-              element={<ProductEditScreen />}
-            />
-            <Route path="/admin/orderlist" element={<OrderListScreen />} />
+                  <Route
+                    path="/admin/product/:id/edit"
+                    element={<ProductEditScreen />}
+                  />
+                  <Route
+                    path="/admin/orderlist"
+                    element={<OrderListScreen />}
+                  />
 
-            <Route path="/search/:keyword" element={<HomeScreen />} />
-            <Route path="/page/:pageNumber" element={<HomeScreen />} />
-            <Route
-              path="/search/:keyword/page/:pageNumber"
-              element={<HomeScreen />}
-            />
-            <Route path="/" element={<HomeScreen />} />
-          </Routes>
-        </Container>
-      </main>
-      <Footer />
-    </Router>
+                  <Route path="/search/:keyword" element={<HomeScreen />} />
+                  <Route path="/page/:pageNumber" element={<HomeScreen />} />
+                  <Route
+                    path="/search/:keyword/page/:pageNumber"
+                    element={<HomeScreen />}
+                  />
+                  <Route path="/" element={<HomeScreen />} />
+                </Routes>
+              </Container>
+            </main>
+            <Footer />
+          </Router>
+        </PayPalScriptProvider>
+      )}
+    </>
   );
 };
 
