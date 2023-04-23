@@ -4,6 +4,9 @@
 main {
   min-height: 80vh;
 }
+img {
+  object-fit: cover;
+}
 .navbar {
   background-color: rgb(254, 234, 188);
 }

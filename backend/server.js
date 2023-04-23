@@ -2,7 +2,7 @@ import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-
+import morgan from "morgan";
 import colors from "colors";
 
 import productRoutes from "./routes/productRoutes.js";
@@ -16,7 +16,9 @@ import { execPath } from "process";
 
 dotenv.config();
 const app = express();
-
+if (process.nextTick.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 app.use(express.json());
 connectDB();
 

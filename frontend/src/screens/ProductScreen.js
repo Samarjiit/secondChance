@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import Rating from "../components/Rating";
+import Meta from "../components/Meta";
 import {
   Row,
   Col,
@@ -66,6 +67,7 @@ const ProductScreen = ({}) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
+          <Meta title={product.name} />
           <Row>
             <Col md={5}>
               <Image src={product.image} alt={product.name} fluid id="pimg" />
