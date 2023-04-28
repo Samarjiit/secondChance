@@ -136,14 +136,21 @@ const ProductScreen = ({}) => {
                     onClick={addToCartHandler}
                     className="btn-block"
                     type="button"
-                    disabled={product.countInStock === 0}
+                    disabled={
+                      product.countInStock === 0 ||
+                      product.user === userInfo._id
+                    }
                   >
                     Buy
                   </Button>
                 </ListGroupItem>
                 <h6 id="or">or</h6>
                 <ListGroupItem id="btn">
-                  <Button className="btn-block" type="button">
+                  <Button
+                    className="btn-block"
+                    type="button"
+                    disabled={product.user === userInfo._id}
+                  >
                     Chat with the Seller
                   </Button>
                 </ListGroupItem>
@@ -234,7 +241,11 @@ const ProductScreen = ({}) => {
                             </Form.Group>
                             <br></br>
                             <Form.Group className="buttons">
-                              <Button type="submit" variant="light">
+                              <Button
+                                type="submit"
+                                variant="light"
+                                disabled={product.user === userInfo._id}
+                              >
                                 Submit
                               </Button>
                             </Form.Group>

@@ -238,7 +238,7 @@ export const listOrders = () => async (dispatch, getState) => {
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message;
-    if (message === "Not authorized, token failed") {
+    if (message === "zed, token failed") {
       dispatch(logout());
     }
     dispatch({

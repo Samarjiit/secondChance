@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -178,32 +177,47 @@ const OrderScreen = () => {
               </Row>
             </ListGroup.Item>
 
-            {!order.isPaid && (
-              <ListGroup.Item>
-                {loadingPay && <Loader />}
-                {isPending && <Loader />}
-                {isRejected && (
-                  <Message variant="danger">SDK load error</Message>
-                )}
-                {!isResolved ? (
-                  <Loader />
-                ) : (
-                  <PayPalButtons
-                    createOrder={createOrder}
-                    onApprove={successPaymentHandler}
-                  />
-                )}
-              </ListGroup.Item>
-            )}
+            {!order.isPaid &&
+              order.paymentMethod.paymentMethod === "Paypal" && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {isPending && <Loader />}
+                  {isRejected && (
+                    <Message variant="danger">SDK load error</Message>
+                  )}
+                  {!isResolved ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButtons
+                      createOrder={createOrder}
+                      onApprove={successPaymentHandler}
+                    />
+                  )}
+                </ListGroup.Item>
+              )}
+
             {loadingDeliver && <Loader />}
             {userInfo &&
-              userInfo.isAdmin &&
               order.isPaid &&
-              !order.isDelivered && (
+              !order.isDelivered &&
+              (userInfo.isAdmin || userInfo.isSeller) &&
+              order.orderItems.find((item) => item.seller === userInfo._id) && (
                 <ListGroup.Item className="buttons" id="btn">
                   <Row>
                     <Button type="button" onClick={deliverHandler}>
                       Mark as Delivered
+                    </Button>
+                  </Row>
+                </ListGroup.Item>
+              )}
+            {userInfo &&
+              !order.isPaid &&
+              order.paymentMethod.paymentMethod === "cod" &&
+              userInfo.isAdmin && (
+                <ListGroup.Item className="buttons" id="btn">
+                  <Row>
+                    <Button type="button" onClick={deliverHandler}>
+                      Mark as Paid
                     </Button>
                   </Row>
                 </ListGroup.Item>

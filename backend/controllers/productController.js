@@ -4,7 +4,7 @@ import Product from "../models/productModel.js";
 //@route GET/api/products
 //@access Public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 8;
+  const pageSize = 20;
   const page = Number(req.query.pageNumber) || 1;
   const keyword = req.query.keyword
     ? {
@@ -128,6 +128,25 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc: update stock of a product
+// @route: PUT /api/products/:id
+// @access: private
+const updateStock = asyncHandler(async (req, res) => {
+  const { countInStock } = req.body;
+
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    product.countInStock = countInStock;
+
+    const updatedStock = await product.save();
+    res.json(updatedStock);
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
 //@desc Create new review
 //@route POST/api/products/:id/reviews
 //@access Private
@@ -170,6 +189,76 @@ const getTopProducts = asyncHandler(async (req, res) => {
   res.json(products);
 });
 
+//@desc Delete a product
+//@route DELETE/api/products/:id
+//@access Private/Seller
+const deleteSellerProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    if (req.user._id == product.user._id) {
+      await product.deleteOne();
+      res.json({ message: "Product removed" });
+    }
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
+//@desc Create a product
+//@route POST/api/products
+//@access Private/Seller
+const createSellerProduct = asyncHandler(async (req, res) => {
+  const product = new Product({
+    name: "Sample name",
+    price: 0,
+    user: req.user._id,
+    sellername: req.user.name,
+    condition: "New",
+    image: "/images/sample.png",
+    brand: "Sample brand",
+    category: "Sample category",
+    countInStock: 0,
+    numReviews: 0,
+    description: "Sample description",
+    uploaddate: Date.now(),
+  });
+  const createdProduct = await product.save();
+  res.status(201).json(createdProduct);
+});
+//@desc Update a product
+//@route PUT/api/products/:id
+//@access Private/Admin
+const updateSellerProduct = asyncHandler(async (req, res) => {
+  const {
+    name,
+    price,
+    description,
+    image,
+    brand,
+    condition,
+    category,
+    countInStock,
+  } = req.body;
+  const product = await Product.findById(req.params.id);
+  if (product) {
+    product.name = name;
+    product.price = price;
+    product.description = description;
+    product.image = image;
+    product.brand = brand;
+    product.condition = condition;
+    product.category = category;
+    product.countInStock = countInStock;
+
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
 export {
   getProducts,
   getProductById,
@@ -178,4 +267,8 @@ export {
   updateProduct,
   createProductReview,
   getTopProducts,
+  updateStock,
+  deleteSellerProduct,
+  createSellerProduct,
+  updateSellerProduct,
 };

@@ -8,14 +8,14 @@ img {
   object-fit: cover;
 }
 .navbar {
-  background-color: rgb(254, 234, 188);
+  background-color: rgba(251, 238, 208, 0.846);
 }
 .navbar a {
   color: rgb(117, 43, 9);
 }
 
 #basic-navbar-nav {
-  background-color: rgb(254, 234, 188);
+  background-color: rgba(251, 238, 208, 0.846);
   text-align: left;
 }
 
@@ -250,7 +250,7 @@ td {
 }
 
 .carousel {
-  background-color: rgba(254, 234, 188, 0.567);
+  background-color: rgba(255, 220, 220, 0.542);
 }
 .carousel-item-next,
 .carousel-item-prev,

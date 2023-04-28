@@ -14,6 +14,7 @@ const UserEditScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
   const dispatch = useDispatch();
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
@@ -25,7 +26,7 @@ const UserEditScreen = () => {
   } = userUpdate;
   const navigate = useNavigate();
   useEffect(() => {
-    if (successUpdate) {
+    if (successUpdate && user.isAdmin) {
       dispatch({ type: USER_UPDATE_RESET });
       navigate("/admin/userlist");
     } else {
@@ -35,12 +36,13 @@ const UserEditScreen = () => {
         setName(user.name);
         setEmail(user.email);
         setIsAdmin(user.isAdmin);
+        setIsSeller(user.isSeller);
       }
     }
   }, [dispatch, user, userId, navigate, successUpdate]);
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateUser({ _id: userId, name, email, isAdmin }));
+    dispatch(updateUser({ _id: userId, name, email, isAdmin, isSeller }));
   };
   return (
     <>
@@ -88,7 +90,17 @@ const UserEditScreen = () => {
                 type="checkbox"
                 label="Is Admin"
                 checked={isAdmin}
+                disabled={user._id === userId && user.isAdmin}
                 onChange={(e) => setIsAdmin(e.target.checked)}
+              ></Form.Check>
+            </Form.Group>
+            <Form.Group controlId="isseller">
+              <Form.Check
+                type="checkbox"
+                label="Is Seller"
+                checked={isSeller}
+                disabled={user._id === userId && user.isSeller}
+                onChange={(e) => setIsSeller(e.target.checked)}
               ></Form.Check>
             </Form.Group>
 

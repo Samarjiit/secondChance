@@ -18,8 +18,11 @@ import OrderScreen from "./screens/OrderScreen";
 import UserListScreen from "./screens/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen";
 import ProductListScreen from "./screens/ProductListScreen";
+import SellerProductListScreen from "./screens/SellerProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
+import SellerProductEditScreen from "./screens/SellerProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
+import SellerOrderListScreen from "./screens/SellerOrderListScreen";
 
 const App = () => {
   const [clientID, setClientID] = useState("");
@@ -62,18 +65,38 @@ const App = () => {
                     path="/admin/productlist"
                     element={<ProductListScreen />}
                   />
-
+                  <Route
+                    path="/admin/productlist/:pageNumber"
+                    element={<ProductListScreen />}
+                  />
+                  <Route
+                    path="/seller/productlist"
+                    element={<SellerProductListScreen />}
+                  />
+                  <Route
+                    path="/seller/productlist/:pageNumber"
+                    element={<SellerProductListScreen />}
+                  />
                   <Route
                     path="/admin/product/:id/edit"
                     element={<ProductEditScreen />}
                   />
                   <Route
+                    path="/seller/product/:id/edit"
+                    element={<SellerProductEditScreen />}
+                  />
+                  <Route
                     path="/admin/orderlist"
                     element={<OrderListScreen />}
+                  />
+                  <Route
+                    path="/seller/orderlist"
+                    element={<SellerOrderListScreen />}
                   />
 
                   <Route path="/search/:keyword" element={<HomeScreen />} />
                   <Route path="/page/:pageNumber" element={<HomeScreen />} />
+
                   <Route
                     path="/search/:keyword/page/:pageNumber"
                     element={<HomeScreen />}

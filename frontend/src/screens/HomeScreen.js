@@ -14,6 +14,7 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const { keyword } = useParams();
   const { pageNumber } = useParams() || 1;
+
   const productList = useSelector((state) => state.productList);
   const { loading, error, products, page, pages } = productList;
   useEffect(() => {
@@ -23,6 +24,7 @@ const HomeScreen = () => {
   return (
     <>
       <Meta />
+
       {!keyword ? (
         <ProductCarousel />
       ) : (

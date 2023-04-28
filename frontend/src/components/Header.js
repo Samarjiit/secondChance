@@ -64,6 +64,16 @@ const Header = () => {
                   </LinkContainer>
                 </NavDropdown>
               )}
+              {userInfo && userInfo.isSeller && (
+                <NavDropdown title="Seller" id="sellermenu">
+                  <LinkContainer to="/seller/productlist">
+                    <NavDropdown.Item>Products</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/seller/orderlist">
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -73,3 +83,8 @@ const Header = () => {
 };
 
 export default Header;
+/*  
+<LinkContainer to="/admin/userlist">
+<NavDropdown.Item>Users</NavDropdown.Item>
+</LinkContainer>
+*/

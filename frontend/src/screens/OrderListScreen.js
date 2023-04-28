@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, ListGroup, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -39,11 +39,11 @@ const OrderListScreen = () => {
               <th>ID</th>
               <th>USER</th>
               <th>DATE</th>
-
+              <th>PRODUCTS</th>
               <th>TOTAL</th>
               <th>PAID</th>
               <th>DELIVERED</th>
-              <th> </th>
+              <th>DETAILS</th>
             </tr>
           </thead>
           <tbody>
@@ -52,6 +52,16 @@ const OrderListScreen = () => {
                 <td>{order._id}</td>
                 <td>{order.user && order.user.name}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
+                <td>
+                  {" "}
+                  {order.orderItems.map((item, index) => (
+                    <ListGroup.Item key={index}>
+                      <Row>
+                        <Col>{item.name}</Col>
+                      </Row>
+                    </ListGroup.Item>
+                  ))}
+                </td>
                 <td>Rs. {order.totalPrice}</td>
                 <td>
                   {order.isPaid ? (

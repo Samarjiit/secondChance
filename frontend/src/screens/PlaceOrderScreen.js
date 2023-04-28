@@ -8,11 +8,14 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import { createOrder } from "../actions/orderActions";
 import { ORDER_CREATE_RESET } from "../constants/orderConstants";
 import { USER_DETAILS_RESET } from "../constants/userConstants";
+import { updateStock } from "../actions/productActions";
 
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
+  const productListAll = useSelector((state) => state.productListAll);
+  const { products } = productListAll;
   //cal prices
   const addDecimals = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2);
@@ -24,6 +27,9 @@ const PlaceOrderScreen = () => {
   cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)));
   const orderCreate = useSelector((state) => state.orderCreate);
   const { order, success, error } = orderCreate;
+  cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.taxPrice)).toFixed(
+    2
+  );
   useEffect(() => {
     if (success) {
       navigate(`/order/${order._id}`);
@@ -33,6 +39,34 @@ const PlaceOrderScreen = () => {
     //eslint-disable-next-line
   }, [navigate, success, dispatch]);
 
+  const adjustStock = () => {
+    let adjustedStock = [];
+    let adjustedState = [];
+
+    cart.cartItems.map((item) => {
+      const item_id = item.product;
+      const updatedQty = item.countInStock - item.qty;
+      adjustedStock.push({ item_id, updatedQty });
+      return adjustedStock;
+    });
+
+    adjustedStock.forEach((item) => {
+      products.map((product) => {
+        if (item.item_id === product._id) {
+          product.countInStock = item.updatedQty;
+          adjustedState.push({
+            _id: product._id,
+            countInStock: product.countInStock,
+          });
+        }
+        return adjustedState;
+      });
+    });
+
+    adjustedState.forEach((item) => {
+      dispatch(updateStock({ _id: item._id, countInStock: item.countInStock }));
+    });
+  };
   const placeOrderHandler = () => {
     dispatch(
       createOrder({
@@ -44,10 +78,9 @@ const PlaceOrderScreen = () => {
         totalPrice: cart.totalPrice,
       })
     );
+    adjustStock();
   };
-  cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.taxPrice)).toFixed(
-    2
-  );
+
   return (
     <>
       <CheckoutSteps step1 step2 step3 id="steps" />
