@@ -11,7 +11,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import Meta from "../components/Meta";
 const ProfileScreen = ({ location }) => {
   const [name, setName] = useState("");
-  const [phoneNo, setPhoneNo] = useState();
+  const [phoneNo, setPhoneNo] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

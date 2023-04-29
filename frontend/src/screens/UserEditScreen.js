@@ -15,7 +15,7 @@ const UserEditScreen = () => {
   const userId = id;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNo, setPhoneNo] = useState();
+  const [phoneNo, setPhoneNo] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
 

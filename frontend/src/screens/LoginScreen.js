@@ -11,6 +11,7 @@ import Meta from "../components/Meta";
 const LoginScreen = ({ location }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState(null);
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
@@ -25,7 +26,11 @@ const LoginScreen = ({ location }) => {
   }, [userInfo, redirect, navigate]);
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    if (email.trim() === "" || password.trim() === "") {
+      setMessage("All fields are required.");
+    } else {
+      dispatch(login(email, password));
+    }
   };
   return (
     <>
@@ -33,6 +38,7 @@ const LoginScreen = ({ location }) => {
       <FormContainer>
         <br></br>
         <h4>Sign In</h4>
+        {message && <Message variant="light">{message}</Message>}
         {error && <Message variant="light">{error}</Message>}
         {loading && <Loader />}
         <Form onSubmit={submitHandler}>

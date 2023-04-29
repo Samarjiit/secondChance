@@ -9,7 +9,7 @@ import { register } from "../actions/userActions";
 import Meta from "../components/Meta";
 const RegisterScreen = ({ location }) => {
   const [name, setName] = useState("");
-  const [phoneNo, setPhoneNo] = useState();
+  const [phoneNo, setPhoneNo] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,12 +26,34 @@ const RegisterScreen = ({ location }) => {
       navigate(redirect);
     }
   }, [navigate, userInfo, redirect]);
+
   const submitHandler = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    if (!/^[A-Za-z\s]+$/.test(name)) {
+      setMessage("Invalid name format. (Should start with a capital letter)");
+    } else if (!/^[789]\d{9}$/.test(phoneNo)) {
+      setMessage("Invalid phone number.");
+    } else if (!/^[A-Za-z0-9._]+@[A-Za-z0-9]+\.[A-Za-z]+$/.test(email)) {
+      setMessage("Invalid email.");
+    } else if (
+      !/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?]).{6,}$/.test(
+        password
+      )
+    ) {
+      setMessage(
+        "Invalid password. (Must contain 1 digit, 1 lowercase, 1 uppercase and 1 special character)"
+      );
+    } else if (password !== confirmPassword) {
       setMessage("Passwords do not match.");
+    } else if (
+      name.trim() === "" ||
+      email.trim() === "" ||
+      password.trim() === "" ||
+      confirmPassword.trim() === ""
+    ) {
+      setMessage("All fields are required.");
     } else {
-      dispatch(register(name, email, phoneNo, password));
+      dispatch(register(name, phoneNo, email, password));
     }
   };
   return (
