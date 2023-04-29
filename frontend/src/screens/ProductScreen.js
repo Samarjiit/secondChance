@@ -138,7 +138,7 @@ const ProductScreen = ({}) => {
                     type="button"
                     disabled={
                       product.countInStock === 0 ||
-                      product.user === userInfo._id
+                      (userInfo && product.user === userInfo._id)
                     }
                   >
                     Buy
@@ -149,7 +149,7 @@ const ProductScreen = ({}) => {
                   <Button
                     className="btn-block"
                     type="button"
-                    disabled={product.user === userInfo._id}
+                    disabled={userInfo && product.user === userInfo._id}
                   >
                     Chat with the Seller
                   </Button>

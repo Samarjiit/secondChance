@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listUsers, deleteUser } from "../actions/userActions";
-
+import Meta from "../components/Meta";
 const UserListScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ const UserListScreen = () => {
 
   return (
     <>
+      <Meta title="2nd Chance | Admin" />
       <h4>Users</h4>
       {loading ? (
         <Loader />
@@ -47,6 +48,7 @@ const UserListScreen = () => {
             <tr>
               <th>ID</th>
               <th>NAME</th>
+              <th>PHONE NO.</th>
               <th>EMAIL</th>
               <th>ADMIN</th>
               <th>SELLER</th>
@@ -56,8 +58,9 @@ const UserListScreen = () => {
           <tbody>
             {users.map((user) => (
               <tr key={user._id}>
-                <td>{user._id}</td>
+                <td>{user._id.substring(21, 24)}</td>
                 <td>{user.name}</td>
+                <td>{user.phoneNo}</td>
                 <td>
                   <a href={`mailto:${user.email}`}>{user.email}</a>
                 </td>

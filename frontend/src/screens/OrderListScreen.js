@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listOrders } from "../actions/orderActions";
-
+import Meta from "../components/Meta";
 const OrderListScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ const OrderListScreen = () => {
 
   return (
     <>
+      <Meta title="2nd Chance | Admin" />
       <h4>Orders</h4>
       {loading ? (
         <Loader />
@@ -37,9 +38,10 @@ const OrderListScreen = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>USER</th>
+              <th>CUSTOMER</th>
               <th>DATE</th>
               <th>PRODUCTS</th>
+              <th>APPOINTMENT</th>
               <th>TOTAL</th>
               <th>PAID</th>
               <th>DELIVERED</th>
@@ -49,7 +51,7 @@ const OrderListScreen = () => {
           <tbody>
             {orders.map((order) => (
               <tr key={order._id}>
-                <td>{order._id}</td>
+                <td>{order._id.substring(21, 24)}</td>
                 <td>{order.user && order.user.name}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
                 <td>
@@ -61,6 +63,13 @@ const OrderListScreen = () => {
                       </Row>
                     </ListGroup.Item>
                   ))}
+                </td>
+                <td>
+                  {order.appointmentAddress.place}
+                  <br></br>
+                  {order.appointmentAddress.day}
+                  <br></br>
+                  {order.appointmentAddress.timeSlot}
                 </td>
                 <td>Rs. {order.totalPrice}</td>
                 <td>

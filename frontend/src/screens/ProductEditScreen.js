@@ -12,7 +12,7 @@ import {
   PRODUCT_UPDATE_RESET,
 } from "../constants/productConstants";
 import moment from "moment";
-
+import Meta from "../components/Meta";
 const ProductEditScreen = () => {
   const { id } = useParams();
   const productId = id;
@@ -106,6 +106,7 @@ const ProductEditScreen = () => {
   };
   return (
     <>
+      <Meta title="2nd Chance | Admin" />
       <Link className="btn btn-light my-3 back" to="/admin/productlist">
         <i className="fa-solid fa-chevron-left"></i>
       </Link>

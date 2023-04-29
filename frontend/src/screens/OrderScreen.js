@@ -15,7 +15,7 @@ import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
 } from "../constants/orderConstants";
-
+import Meta from "../components/Meta";
 const OrderScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -67,7 +67,8 @@ const OrderScreen = () => {
     <Message variant="light">{error}</Message>
   ) : (
     <>
-      <h4>Order id: {order._id}</h4>
+      <Meta title="2nd Chance | Order" />
+      <h4>Order id: {order._id.substring(21, 24)}</h4>
       <br></br>
       <Row>
         <Col md={8}>
@@ -77,16 +78,18 @@ const OrderScreen = () => {
               <strong>Name: </strong>
               {order.user.name}
               <br></br>
+              <strong>Phone Number: </strong>
+              {order.user.phoneNo}
+              <br></br>
               <strong>Email: </strong>
               <a href={`mailto: ${order.user.email}`}>{order.user.email}</a>
               <br></br>
+
               <p>
                 {" "}
-                <strong>Address: </strong>
-                {order.appointmentAddress.address},{" "}
-                {order.appointmentAddress.city},{" "}
-                {order.appointmentAddress.postalCode},{" "}
-                {order.appointmentAddress.country}
+                <strong>Appointment At: </strong>
+                {order.appointmentAddress.place}, {order.appointmentAddress.day}
+                , {order.appointmentAddress.timeSlot},{" "}
               </p>
 
               {order.isDelivered ? (
@@ -97,7 +100,6 @@ const OrderScreen = () => {
                 <Message variant="info">Not Delivered</Message>
               )}
             </ListGroup.Item>
-            <br></br>
             <ListGroup.Item>
               <h5>Payment Method</h5>
               <p>
@@ -114,7 +116,6 @@ const OrderScreen = () => {
                 <Message variant="info">Not Paid</Message>
               )}
             </ListGroup.Item>
-
             <ListGroup.Item>
               <h5>Order Items</h5>
               {order.orderItems.length === 0 ? (
@@ -156,20 +157,20 @@ const OrderScreen = () => {
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Items</Col>
-                <Col>Rs.{order.itemsPrice}</Col>
+                <Col>Items:</Col>
+                <Col>{order.orderItems.length}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Tax</Col>
+                <Col>Tax:</Col>
                 <Col>Rs.{order.taxPrice}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
                 <Col>
-                  <strong>Total</strong>
+                  <strong>Total:</strong>
                 </Col>
                 <Col>
                   <strong>Rs.{order.totalPrice}</strong>
@@ -178,7 +179,8 @@ const OrderScreen = () => {
             </ListGroup.Item>
 
             {!order.isPaid &&
-              order.paymentMethod.paymentMethod === "Paypal" && (
+              order.paymentMethod.paymentMethod === "Paypal" &&
+              order.paymentMethod.paymentMethod !== "COD" && (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
                   {isPending && <Loader />}
@@ -195,12 +197,40 @@ const OrderScreen = () => {
                   )}
                 </ListGroup.Item>
               )}
-
+            {loadingPay && <Loader />}
+            {userInfo &&
+              !order.isPaid &&
+              !order.isDelivered &&
+              order.paymentMethod.paymentMethod === "COD" &&
+              userInfo.isAdmin && (
+                <ListGroup.Item className="buttons" id="btn">
+                  <Row>
+                    <Button type="button" onClick={deliverHandler}>
+                      Mark as Paid
+                    </Button>
+                  </Row>
+                </ListGroup.Item>
+              )}
+            {loadingPay && <Loader />}
+            {userInfo &&
+              !order.isPaid &&
+              !order.isDelivered &&
+              order.paymentMethod.paymentMethod === "COD" &&
+              userInfo.isSeller &&
+              order.orderItems.find((item) => item.seller === userInfo._id) && (
+                <ListGroup.Item className="buttons" id="btn">
+                  <Row>
+                    <Button type="button" onClick={deliverHandler}>
+                      Mark as Paid
+                    </Button>
+                  </Row>
+                </ListGroup.Item>
+              )}
             {loadingDeliver && <Loader />}
             {userInfo &&
               order.isPaid &&
               !order.isDelivered &&
-              (userInfo.isAdmin || userInfo.isSeller) &&
+              userInfo.isSeller &&
               order.orderItems.find((item) => item.seller === userInfo._id) && (
                 <ListGroup.Item className="buttons" id="btn">
                   <Row>
@@ -210,14 +240,15 @@ const OrderScreen = () => {
                   </Row>
                 </ListGroup.Item>
               )}
+            {loadingDeliver && <Loader />}
             {userInfo &&
-              !order.isPaid &&
-              order.paymentMethod.paymentMethod === "cod" &&
+              order.isPaid &&
+              !order.isDelivered &&
               userInfo.isAdmin && (
                 <ListGroup.Item className="buttons" id="btn">
                   <Row>
                     <Button type="button" onClick={deliverHandler}>
-                      Mark as Paid
+                      Mark as Delivered
                     </Button>
                   </Row>
                 </ListGroup.Item>

@@ -9,7 +9,7 @@ import { createOrder } from "../actions/orderActions";
 import { ORDER_CREATE_RESET } from "../constants/orderConstants";
 import { USER_DETAILS_RESET } from "../constants/userConstants";
 import { updateStock } from "../actions/productActions";
-
+import Meta from "../components/Meta";
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -83,16 +83,15 @@ const PlaceOrderScreen = () => {
 
   return (
     <>
+      <Meta title="2nd Chance | Place Order" />
       <CheckoutSteps step1 step2 step3 id="steps" />
       <Row>
         <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h4>Appointment</h4>
-              <strong>Address: </strong>
-              {cart.appointmentAddress.address}, {cart.appointmentAddress.city},{" "}
-              {cart.appointmentAddress.postalCode},{" "}
-              {cart.appointmentAddress.country}
+              {cart.appointmentAddress.place}, {cart.appointmentAddress.day},{" "}
+              {cart.appointmentAddress.timeSlot}
             </ListGroup.Item>
             <ListGroup.Item>
               <h4>Payment Method</h4>

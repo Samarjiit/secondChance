@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listOrders } from "../actions/orderActions";
-
+import Meta from "../components/Meta";
 const OrderListScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ const OrderListScreen = () => {
 
   return (
     <>
+      <Meta title="2nd Chance | Seller" />
       <h4>Orders</h4>
       {loading ? (
         <Loader />
@@ -37,7 +38,7 @@ const OrderListScreen = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>USER</th>
+              <th>CUSTOMER</th>
               <th>DATE</th>
               <th>PRODUCTS</th>
               <th>TOTAL</th>
@@ -48,12 +49,15 @@ const OrderListScreen = () => {
           </thead>
           <tbody>
             {orders
-              .filter((order) =>
-                order.orderItems.map((item) => item.seller === userInfo._id)
+              .filter(
+                (order) =>
+                  order.orderItems.find(
+                    (item) => item.seller === userInfo._id
+                  ) && order.user._id !== userInfo._id
               )
               .map((order) => (
                 <tr key={order._id}>
-                  <td>{order._id}</td>
+                  <td>{order._id.substring(21, 24)}</td>
                   <td>{order.user && order.user.name}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
                   <td>
@@ -82,7 +86,7 @@ const OrderListScreen = () => {
                     )}
                   </td>
                   <td>
-                    <LinkContainer to={`/seller/order/${order._id}`}>
+                    <LinkContainer to={`/order/${order._id}`}>
                       <Button variant="light" className="btn-sm">
                         Details
                       </Button>

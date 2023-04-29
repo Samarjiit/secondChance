@@ -12,7 +12,7 @@ import {
   createProduct,
 } from "../actions/productActions";
 import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
-
+import Meta from "../components/Meta";
 const ProductListScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -73,6 +73,7 @@ const ProductListScreen = () => {
 
   return (
     <>
+      <Meta title="2nd Chance | Admin" />
       <Row className="align-items-center">
         <Col>
           <h4>Products</h4>
@@ -99,8 +100,7 @@ const ProductListScreen = () => {
                 <th>ID</th>
                 <th>NAME</th>
                 <th>PRICE</th>
-                <th>Sellerid</th>
-
+                <th>SELLERID</th>
                 <th>STOCK</th>
                 <th>CATEGORY</th>
                 <th>BRAND</th>
@@ -110,17 +110,21 @@ const ProductListScreen = () => {
             <tbody>
               {products.map((product) => (
                 <tr key={product._id}>
-                  <td>{product._id}</td>
+                  <td>{product._id.substring(21, 24)}</td>
                   <td>{product.name}</td>
                   <td>Rs. {product.price}</td>
-                  <td>{product.user}</td>
-
+                  <td>{product.user.substring(21, 24)}</td>
                   <td>{product.countInStock}</td>
                   <td> {product.category}</td>
                   <td>{product.brand}</td>
                   <td>
                     {userInfo && userInfo.isAdmin && (
-                      <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                      <LinkContainer
+                        to={`/admin/product/${product._id.substring(
+                          21,
+                          24
+                        )}/edit`}
+                      >
                         <Button variant="light" className="btn-sm">
                           <i className="fas fa-edit"></i>
                         </Button>

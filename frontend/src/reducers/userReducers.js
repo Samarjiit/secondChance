@@ -88,21 +88,13 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
 export const userUpdateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_UPDATE_PROFILE_REQUEST:
-      return {
-        loading: true,
-      };
+      return { loading: true };
     case USER_UPDATE_PROFILE_SUCCESS:
-      return {
-        loading: false,
-        success: true,
-        userInfo: action.payload,
-      };
+      return { loading: false, success: true, userInfo: action.payload };
     case USER_UPDATE_PROFILE_FAIL:
       return { loading: false, error: action.payload };
     case USER_UPDATE_PROFILE_RESET:
-      return {
-        user: {},
-      };
+      return {};
     default:
       return state;
   }
@@ -146,18 +138,12 @@ export const userDeleteReducer = (state = {}, action) => {
       return state;
   }
 };
-
 export const userUpdateReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case USER_UPDATE_REQUEST:
-      return {
-        loading: true,
-      };
+      return { loading: true };
     case USER_UPDATE_SUCCESS:
-      return {
-        loading: false,
-        success: true,
-      };
+      return { loading: false, success: true };
     case USER_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case USER_UPDATE_RESET:

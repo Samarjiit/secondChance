@@ -7,15 +7,18 @@ import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import { getUserDetails, updateUser } from "../actions/userActions";
 import { USER_UPDATE_RESET } from "../constants/userConstants";
-
+import Meta from "../components/Meta";
 const UserEditScreen = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userId = id;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNo, setPhoneNo] = useState();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
-  const dispatch = useDispatch();
+
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
   const userUpdate = useSelector((state) => state.userUpdate);
@@ -24,7 +27,7 @@ const UserEditScreen = () => {
     error: errorUpdate,
     success: successUpdate,
   } = userUpdate;
-  const navigate = useNavigate();
+
   useEffect(() => {
     if (successUpdate && user.isAdmin) {
       dispatch({ type: USER_UPDATE_RESET });
@@ -35,6 +38,7 @@ const UserEditScreen = () => {
       } else {
         setName(user.name);
         setEmail(user.email);
+        setPhoneNo(user.phoneNo);
         setIsAdmin(user.isAdmin);
         setIsSeller(user.isSeller);
       }
@@ -42,10 +46,13 @@ const UserEditScreen = () => {
   }, [dispatch, user, userId, navigate, successUpdate]);
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateUser({ _id: userId, name, email, isAdmin, isSeller }));
+    dispatch(
+      updateUser({ _id: userId, name, email, phoneNo, isAdmin, isSeller })
+    );
   };
   return (
     <>
+      <Meta title="2nd Chance | Admin" />
       <Link className="btn btn-light my-3 back" to="/admin/userlist">
         <i className="fa-solid fa-chevron-left"></i>
       </Link>
@@ -70,6 +77,18 @@ const UserEditScreen = () => {
                 placeholder="Enter name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group controlId="phoneNo">
+              <br></br>
+              <Form.Label>
+                <h6>Phone Number</h6>
+              </Form.Label>
+              <Form.Control
+                type="tel"
+                placeholder="Enter phone number"
+                value={phoneNo}
+                onChange={(e) => setPhoneNo(e.target.value)}
               ></Form.Control>
             </Form.Group>
             <Form.Group controlId="email">
@@ -99,7 +118,7 @@ const UserEditScreen = () => {
                 type="checkbox"
                 label="Is Seller"
                 checked={isSeller}
-                disabled={user._id === userId && user.isSeller}
+                disabled={user._id === userId && userId.isSeller}
                 onChange={(e) => setIsSeller(e.target.checked)}
               ></Form.Check>
             </Form.Group>

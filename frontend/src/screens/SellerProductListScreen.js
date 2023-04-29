@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import Paginate from "../components/Paginate";
-
+import Meta from "../components/Meta";
 import {
   listProducts,
   deleteProduct,
@@ -72,6 +72,7 @@ const ProductListScreen = () => {
 
   return (
     <>
+      <Meta title="2nd Chance | Seller" />
       <Row className="align-items-center">
         <Col>
           <h4>Products</h4>
@@ -98,7 +99,6 @@ const ProductListScreen = () => {
                 <th>ID</th>
                 <th>NAME</th>
                 <th>PRICE</th>
-
                 <th>STOCK</th>
                 <th>CATEGORY</th>
                 <th>BRAND</th>
@@ -110,7 +110,7 @@ const ProductListScreen = () => {
                 .filter((product) => product.user === userInfo._id)
                 .map((product) => (
                   <tr key={product._id}>
-                    <td>{product._id}</td>
+                    <td>{product._id.substring(21, 24)}</td>
                     <td>{product.name}</td>
                     <td>Rs. {product.price}</td>
                     <td>{product.countInStock}</td>
