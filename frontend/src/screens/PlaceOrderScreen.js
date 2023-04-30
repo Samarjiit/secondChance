@@ -6,11 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { createOrder } from "../actions/orderActions";
+import { ORDER_CREATE_RESET } from "../constants/orderConstants";
+import { USER_DETAILS_RESET } from "../constants/userConstants";
 
+import Meta from "../components/Meta";
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
+  const productListAll = useSelector((state) => state.productListAll);
+  const { products } = productListAll;
   //cal prices
   const addDecimals = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2);
@@ -22,12 +27,17 @@ const PlaceOrderScreen = () => {
   cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)));
   const orderCreate = useSelector((state) => state.orderCreate);
   const { order, success, error } = orderCreate;
+  cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.taxPrice)).toFixed(
+    2
+  );
   useEffect(() => {
     if (success) {
       navigate(`/order/${order._id}`);
+      dispatch({ type: USER_DETAILS_RESET });
+      dispatch({ type: ORDER_CREATE_RESET });
     }
     //eslint-disable-next-line
-  }, [navigate, success]);
+  }, [navigate, success, dispatch]);
 
   const placeOrderHandler = () => {
     dispatch(
@@ -41,24 +51,18 @@ const PlaceOrderScreen = () => {
       })
     );
   };
-  cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.taxPrice)).toFixed(
-    2
-  );
+
   return (
     <>
+      <Meta title="2nd Chance | Place Order" />
       <CheckoutSteps step1 step2 step3 id="steps" />
       <Row>
         <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h4>Appointment</h4>
-              <p>
-                <strong>Address: </strong>
-                {cart.appointmentAddress.address},{" "}
-                {cart.appointmentAddress.city},{" "}
-                {cart.appointmentAddress.postalCode},{" "}
-                {cart.appointmentAddress.country}
-              </p>
+              {cart.appointmentAddress.place}, {cart.appointmentAddress.day},{" "}
+              {cart.appointmentAddress.timeSlot}
             </ListGroup.Item>
             <ListGroup.Item>
               <h4>Payment Method</h4>
@@ -83,7 +87,7 @@ const PlaceOrderScreen = () => {
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}>
+                          <Link to={`/product/${item.product}/${item.seller}`}>
                             {item.name}
                           </Link>
                         </Col>
@@ -100,26 +104,26 @@ const PlaceOrderScreen = () => {
           </ListGroup>
         </Col>
         <Col md={4}>
-          <ListGroup variant="flush">
+          <ListGroup>
             <ListGroup.Item>
               <h4>Order Summary</h4>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Items</Col>
-                <Col>Rs.{cart.itemsPrice}</Col>
+                <Col>Items:</Col>
+                <Col>{cart.cartItems.length}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Tax</Col>
+                <Col>Tax:</Col>
                 <Col>Rs.{cart.taxPrice}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
                 <Col>
-                  <strong>Total</strong>
+                  <strong>Total:</strong>
                 </Col>
                 <Col>
                   <strong>Rs.{cart.totalPrice}</strong>
@@ -130,14 +134,16 @@ const PlaceOrderScreen = () => {
             {error && <Message variant="light">{error}</Message>}
 
             <ListGroup.Item id="btn" className="buttons">
-              <Button
-                type="button"
-                variant="light"
-                disabled={!cart.cartItems.length}
-                onClick={placeOrderHandler}
-              >
-                Place Order
-              </Button>
+              <Row>
+                <Button
+                  type="button"
+                  variant="light"
+                  disabled={!cart.cartItems.length}
+                  onClick={placeOrderHandler}
+                >
+                  Place Order
+                </Button>
+              </Row>
             </ListGroup.Item>
           </ListGroup>
         </Col>

@@ -18,13 +18,17 @@ const orderSchema = mongoose.Schema(
           required: true,
           ref: "Product",
         },
+        seller: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "User",
+        },
       },
     ],
     appointmentAddress: {
-      address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
-      country: { type: String, required: true },
+      place: { type: String, required: true },
+      day: { type: String, required: true },
+      timeSlot: { type: String, required: true },
     },
     paymentMethod: {
       type: Object,
@@ -35,6 +39,7 @@ const orderSchema = mongoose.Schema(
       status: { type: String },
       update_time: { type: String },
       email_address: { type: String },
+      phone_number: { type: Number },
     },
     taxPrice: {
       type: Number,

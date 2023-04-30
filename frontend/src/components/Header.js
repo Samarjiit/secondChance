@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
+import SearchBox from "./SearchBox";
 import { logout } from "../actions/userActions";
 import { useNavigate } from "react-router-dom";
 
@@ -27,6 +28,7 @@ const Header = () => {
             <i className="fa-sharp fa-solid fa-bars"></i>
           </Navbar.Toggle>
           <Navbar.Collapse id="basic-navbar-nav">
+            <SearchBox />
             <Nav className="ms-auto">
               <LinkContainer to="/cart">
                 <Nav.Link href="/cart">
@@ -49,6 +51,29 @@ const Header = () => {
                   </Nav.Link>
                 </LinkContainer>
               )}
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown title="Admin" id="adminmenu">
+                  <LinkContainer to="/admin/userlist">
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/productlist">
+                    <NavDropdown.Item>Products</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/orderlist">
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
+              )}
+              {userInfo && userInfo.isSeller && (
+                <NavDropdown title="Seller" id="sellermenu">
+                  <LinkContainer to="/seller/productlist">
+                    <NavDropdown.Item>Products</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/seller/orderlist">
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -58,3 +83,8 @@ const Header = () => {
 };
 
 export default Header;
+/*  
+<LinkContainer to="/admin/userlist">
+<NavDropdown.Item>Users</NavDropdown.Item>
+</LinkContainer>
+*/
