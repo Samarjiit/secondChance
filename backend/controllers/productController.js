@@ -128,25 +128,6 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc: update stock of a product
-// @route: PUT /api/products/:id
-// @access: private
-const updateStock = asyncHandler(async (req, res) => {
-  const { countInStock } = req.body;
-
-  const product = await Product.findById(req.params.id);
-
-  if (product) {
-    product.countInStock = countInStock;
-
-    const updatedStock = await product.save();
-    res.json(updatedStock);
-  } else {
-    res.status(404);
-    throw new Error("Product not found");
-  }
-});
-
 //@desc Create new review
 //@route POST/api/products/:id/reviews
 //@access Private
@@ -267,7 +248,6 @@ export {
   updateProduct,
   createProductReview,
   getTopProducts,
-  updateStock,
   deleteSellerProduct,
   createSellerProduct,
   updateSellerProduct,

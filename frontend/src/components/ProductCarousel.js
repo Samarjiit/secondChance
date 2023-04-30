@@ -20,7 +20,7 @@ const ProductCarousel = () => {
     <Carousel pause="hover" id="carousel">
       {products.map((product) => (
         <Carousel.Item key={product._id}>
-          <Link to={`/product/${product._id}`}>
+          <Link to={`/product/${product._id}/${product.user}`}>
             <Image src={product.image} alt={product.name} fluid></Image>
             <Carousel.Caption className="carousel-caption">
               <h5>

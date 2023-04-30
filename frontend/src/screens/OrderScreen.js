@@ -134,7 +134,7 @@ const OrderScreen = () => {
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}>
+                          <Link to={`/product/${item.product}/${item.seller}`}>
                             {item.name}
                           </Link>
                         </Col>

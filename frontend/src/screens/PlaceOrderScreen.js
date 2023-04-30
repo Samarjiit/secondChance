@@ -8,7 +8,7 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import { createOrder } from "../actions/orderActions";
 import { ORDER_CREATE_RESET } from "../constants/orderConstants";
 import { USER_DETAILS_RESET } from "../constants/userConstants";
-import { updateStock } from "../actions/productActions";
+
 import Meta from "../components/Meta";
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
@@ -39,34 +39,6 @@ const PlaceOrderScreen = () => {
     //eslint-disable-next-line
   }, [navigate, success, dispatch]);
 
-  const adjustStock = () => {
-    let adjustedStock = [];
-    let adjustedState = [];
-
-    cart.cartItems.map((item) => {
-      const item_id = item.product;
-      const updatedQty = item.countInStock - item.qty;
-      adjustedStock.push({ item_id, updatedQty });
-      return adjustedStock;
-    });
-
-    adjustedStock.forEach((item) => {
-      products.map((product) => {
-        if (item.item_id === product._id) {
-          product.countInStock = item.updatedQty;
-          adjustedState.push({
-            _id: product._id,
-            countInStock: product.countInStock,
-          });
-        }
-        return adjustedState;
-      });
-    });
-
-    adjustedState.forEach((item) => {
-      dispatch(updateStock({ _id: item._id, countInStock: item.countInStock }));
-    });
-  };
   const placeOrderHandler = () => {
     dispatch(
       createOrder({
@@ -78,7 +50,6 @@ const PlaceOrderScreen = () => {
         totalPrice: cart.totalPrice,
       })
     );
-    adjustStock();
   };
 
   return (
@@ -116,7 +87,7 @@ const PlaceOrderScreen = () => {
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}>
+                          <Link to={`/product/${item.product}/${item.seller}`}>
                             {item.name}
                           </Link>
                         </Col>

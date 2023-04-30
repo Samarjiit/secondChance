@@ -82,7 +82,9 @@ const CartScreen = ({}) => {
                         ></Image>
                       </Col>
                       <Col md={3}>
-                        <Link to={`/product/${item.product}`}>{item.name}</Link>
+                        <Link to={`/product/${item.product}/${item.seller}`}>
+                          {item.name}
+                        </Link>
                       </Col>
                       <Col md={3}>Rs. {item.price}</Col>
                       <Col md={2}>

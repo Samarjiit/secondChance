@@ -119,12 +119,7 @@ const ProductListScreen = () => {
                   <td>{product.brand}</td>
                   <td>
                     {userInfo && userInfo.isAdmin && (
-                      <LinkContainer
-                        to={`/admin/product/${product._id.substring(
-                          21,
-                          24
-                        )}/edit`}
-                      >
+                      <LinkContainer to={`/admin/product/${product._id}/edit`}>
                         <Button variant="light" className="btn-sm">
                           <i className="fas fa-edit"></i>
                         </Button>

@@ -26,6 +26,12 @@ const addOrderItems = asyncHandler(async (req, res) => {
       taxPrice,
       totalPrice,
     });
+    for (const key in order.orderItems) {
+      const item = order.orderItems[key];
+      const product = await Product.findById(item.product);
+      product.countInStock = product.countInStock - item.qty;
+      await product.save();
+    }
     const createdOrder = await order.save();
     res.status(201).json(createdOrder);
   }
@@ -54,12 +60,6 @@ const getOrderById = asyncHandler(async (req, res) => {
 const updateOrderToPaid = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
   if (order) {
-    /*for (const key in order.orderItems) {
-      const item = order.orderItems[key];
-      const product = await Product.findById(item.product);
-      product.countInStock -= item.qty;
-      await product.save();
-    }*/
     order.isPaid = true;
     order.paidAt = Date.now();
 

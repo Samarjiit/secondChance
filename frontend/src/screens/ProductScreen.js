@@ -129,7 +129,6 @@ const ProductScreen = ({}) => {
                 )}
               </ListGroup>
 
-              <br></br>
               <ListGroup className="buttons" horizontal>
                 <ListGroupItem id="btn">
                   <Button
